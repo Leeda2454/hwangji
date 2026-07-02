@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>황지중학교 학교생활규정 개정 의견 수렴</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<style>
+  body { font-family: 'Malgun Gothic', sans-serif; padding: 15px; max-width: 650px; margin: 0 auto; background-color: #f5f7fa; color: #333; -webkit-text-size-adjust: 100%; }
+  .container { background: #fff; padding: 30px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+  h2 { text-align: center; color: #1e3a8a; margin-bottom: 10px; font-size: 21px; }
+  .pdf-box { background: #eef2f6; padding: 15px; border-radius: 6px; margin-bottom: 25px; text-align: center; border: 1px solid #cbd5e1; }
+  .pdf-box a { color: #2563eb; font-weight: bold; text-decoration: none; }
+  .pdf-box a:hover { text-decoration: underline; }
+  .form-group { margin-bottom: 20px; }
+  label { font-weight: bold; display: block; margin-bottom: 8px; font-size: 15px; }
+  .required { color: #ef4444; margin-left: 4px; }
+  input[type="text"], select, textarea {
+    width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 4px;
+    box-sizing: border-box; font-size: 16px; font-family: inherit;
+  }
+  textarea { resize: vertical; }
+  .sub-form { display: none; background: #f8fafc; padding: 15px; border-radius: 6px; border: 1px solid #e2e8f0; margin-bottom: 20px; }
+  #signature-pad { border: 2px dashed #94a3b8; border-radius: 4px; background: #fff; cursor: crosshair; width: 100%; height: 150px; touch-action: none; }
+  button[type="submit"] { width: 100%; padding: 14px; background-color: #1e3a8a; color: white; border: none; border-radius: 4px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+  button[type="submit"]:hover { background-color: #1d4ed8; }
+  button[type="submit"]:disabled { background-color: #94a3b8; cursor: not-allowed; }
+  .clear-btn { background-color: #ef4444; color: white; border: none; padding: 10px 16px; border-radius: 4px; font-size: 14px; cursor: pointer; margin-top: 8px; min-height: 40px; }
+  .select-row { display: flex; gap: 10px; }
+  .select-row select { flex: 1; }
+  .opinion-entry { background: #f8fafc; border: 1px solid #dbe3ea; border-radius: 8px; padding: 18px; margin-bottom: 15px; position: relative; }
+  .opinion-entry .entry-title { font-weight: bold; color: #1e3a8a; margin-bottom: 12px; font-size: 14px; }
+  .remove-entry-btn { background: #64748b; color: #fff; border: none; border-radius: 4px; padding: 6px 12px; font-size: 12px; cursor: pointer; float: right; }
+  .add-entry-btn { width: 100%; padding: 12px; background: #e0f2fe; color: #0369a1; border: 2px dashed #38bdf8; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 20px; }
+  .add-entry-btn:hover { background: #bae6fd; }
+  .article-select-row { display: flex; gap: 8px; margin-bottom: 10px; flex-wrap: wrap; }
+  .article-select-row select { flex: 1; min-width: 120px; }
+  .detail-hint { font-size: 12px; color: #64748b; margin-top: -5px; margin-bottom: 8px; }
+  .loading-overlay { display:none; position: fixed; inset:0; background: rgba(255,255,255,0.85); z-index: 999; align-items:center; justify-content:center; font-weight:bold; color:#1e3a8a; font-size:16px; }
+
+  @media (max-width: 400px) {
+    .select-row { flex-direction: column; gap: 8px; }
+    .article-select-row { flex-direction: column; }
+    .container { padding: 20px 15px; }
+    h2 { font-size: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="loading-overlay" id="loadingOverlay">제출 중입니다. 잠시만 기다려주세요...</div>
+
+<div class="container">
+  <h2>📜 황지중학교 학교생활규정 개정 의견 수렴</h2>
+
+  <div class="pdf-box">
+    <p style="margin:0 0 8px 0; font-size:14px;">💡 개정안 및 신구대조표를 먼저 확인해 주세요.</p>
+    <a href="https://hwangji.gwe.ms.kr" target="_blank">👉 [여기 클릭] 학교 홈페이지 공지사항 바로가기</a>
+  </div>
+
+  <form id="mainForm">
+    <div class="form-group">
+      <label>1. 제출자 신분을 선택해 주세요.<span class="required">*</span></label>
+      <select id="userType" name="userType" required onchange="toggleFields()">
+        <option value="">-- 선택하세요 --</option>
+        <option value="student">학생</option>
+        <option value="parent">학부모</option>
+        <option value="teacher">교사</option>
+      </select>
+    </div>
+
+    <div id="studentFields" class="sub-form">
+      <div class="form-group">
+        <label>학년 / 반 / 번호<span class="required">*</span></label>
+        <div class="select-row">
+          <select id="studentGrade" name="grade"><option value="">학년 선택</option></select>
+          <select id="studentClass" name="classNum"><option value="">반 선택</option></select>
+          <select id="studentNumber" name="number"><option value="">번호 선택</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>학생 성명<span class="required">*</span></label>
+        <input type="text" id="studentName" name="studentName" placeholder="이름을 입력하세요">
+      </div>
+    </div>
+
+    <div id="parentFields" class="sub-form">
+      <div class="form-group">
+        <label>자녀 학년 / 반 / 번호<span class="required">*</span></label>
+        <div class="select-row">
+          <select id="parentChildGrade" name="childGrade"><option value="">학년 선택</option></select>
+          <select id="parentChildClass" name="childClass"><option value="">반 선택</option></select>
+          <select id="parentChildNumber" name="childNumber"><option value="">번호 선택</option></select>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>자녀 성명<span class="required">*</span></label>
+        <input type="text" id="childName" name="childName" placeholder="자녀 이름을 입력하세요">
+      </div>
+      <div class="form-group">
+        <label>학부모(보호자) 성명<span class="required">*</span></label>
+        <input type="text" id="parentName" name="parentName" placeholder="보호자 이름을 입력하세요">
+      </div>
+    </div>
+
+    <div id="teacherFields" class="sub-form">
+      <div class="form-group">
+        <label>교사 성명<span class="required">*</span></label>
+        <input type="text" id="teacherName" name="teacherName" placeholder="이름을 입력하세요">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>2. 의견을 제시하고자 하는 학교생활규정 조항 및 내용<span class="required">*</span></label>
+      <div id="opinionContainer"></div>
+      <button type="button" class="add-entry-btn" onclick="addOpinionEntry()">➕ 의견 추가하기</button>
+    </div>
+
+    <div class="form-group" id="signatureGroup">
+      <label>3. 서명 (정자로 올바르게 서명해 주세요)<span class="required">*</span></label>
+      <canvas id="signature-pad"></canvas>
+      <button type="button" class="clear-btn" onclick="clearCanvas()">서명 지우기</button>
+    </div>
+
+    <button type="submit">의견 제출하기</button>
+  </form>
+</div>
+
+<script>
+  // ⚠️⚠️⚠️ 여기에 Apps Script 배포 후 나온 /exec URL을 반드시 넣어주세요 ⚠️⚠️⚠️
+  const SCRIPT_URL = "여기에_Apps_Script_배포_exec_URL을_붙여넣으세요";
+
+  const maxGrade = 3;
+  const maxClass = 12;
+  const maxNumber = 35;
+
+  const regulationData = {
+    "제1장 총칙": { articles: [
+      "제1조(명칭)","제2조(목적)","제3조(적용근거)","제4조(규정 적용의 원칙)","제5조(교육 3주체의 책무)"
+    ]},
+    "제2장 학생생활": { sections: {
+      "제1절 학생의 인권 보호": ["제6조(개성 실현의 권리)","제7조(정보에 관한 권리)","제8조(양심과 종교 및 사상의 권리)","제9조(안전한 생활의 권리)","제10조(의사표현의 자유)","제11조(징계 절차에서의 권리)"],
+      "제2절 학생의 기본생활": ["제12조(생활)","제13조(예절)","제14조(동아리활동)","제15조(여가활동)","제16조(폭력예방)","제17조(성차별 및 성폭력 예방)"],
+      "제3절 용의복장": ["제18조(두발 및 복장)","제19조(용모 및 장신구)"],
+      "제4절 학교 내 활동": ["제20조(등하교)","제21조(일과시간 중 외출)","제22조(수업시간)","제23조(물품 조사)","제24조(물품 분리·보관)","제25조(수업 중 스마트기기 사용 금지)","제26조(교내 스마트기기 사용·소지 제한)","제27조(방어 및 보호를 위한 제지)","제28조(수업 외 시간)","제29조(시설이용 및 환경)","제30조(공공기물의 파손)","제31조(생활지도 불응시 조치)","제32조(기타 교내 활동)"],
+      "제5절 개별학생교육지원": ["제33조(개별학생교육지원의 장소, 시간 및 학습지원 방법 등)","제34조(개별학생교육지원 불응시 조치)","제35조(개별학생교육지원 이의제기)"],
+      "제6절 학교 외 활동": ["제36조(교외생활)","제37조(보호자의 의무)"],
+      "제7절 정보통신": ["제38조(사이버 생활)","제39조(교육활동 무단 녹음·촬영 및 유포 금지)","제40조(디지털 인격권 보호 및 영상·음성 무단 유포 금지)","제41조(정보통신 기자재 및 윤리)"]
+    }},
+    "제3장 교원의 학생생활지도": { sections: {
+      "제1절 생활지도의 범위": ["제42조(학업 및 진로)","제43조(보건 및 안전)","제44조(인성 및 대인관계)","제45조(그 밖의 분야)"],
+      "제2절 생활지도의 방식": ["제46조(조언)","제47조(상담)","제48조(주의)","제49조(훈육)","제50조(훈계)","제51조(보상)","제52조(특수교육대상자의 생활지도)","제53조(불응시 조치)","제54조(이의제기)","제55조(개별학생교육지원)"]
+    }},
+    "제4장 포상": { articles: ["제56조(포상)"] },
+    "제5장 학생선도위원회 규정 및 징계": { sections: {
+      "제1절 학생선도위원회": ["제57조(목적 및 설치)","제58조(선도 원칙)","제59조(선도 대상)","제60조(구성)","제61조(소집)","제62조(심의 및 의결)","제63조(심의 진행)","제64조(비밀 유지)","제65조(사안 조사)","제66조(징계 심의 절차)","제67조(사전통지)","제68조(심의 확정)"],
+      "제2절 징계": ["제69조(징계의 종류와 기간)","제70조(징계 기준)","제71조(징계의 방법)","제72조(징계 시 부과 내용)","제73조(징계 결정 및 통보)","제74조(재심)","제75조(징계 유보)","제76조(징계 경감, 해제 및 연장)","제77조(징계 사실 기록)","제78조(사후 지도)","제79조(준용 및 기타)"]
+    }},
+    "제6장 학생자치활동의 조직 및 운영": { articles: ["제80조(학생자치활동의 조직 및 운영)"] },
+    "제7장 개정방법": { articles: ["제81조(학교생활규정 제·개정위원회 구성)","제82조(학교생활규정 제·개정안 발의)","제83조(교육공동체의 의견수렴)","제84조(학교운영위원회 심의)","제85조(학교의 장 승인)","제86조(학교생활규정 공포 및 정보 공시)"] },
+    "부칙": { articles: ["제87조(시행일)","제88조(세부규정)","제89조(기타)"] }
+  };
+
+  let entryCounter = 0;
+
+  function initDropdowns(gradeId, classId, numId) {
+    const gSelect = document.getElementById(gradeId);
+    const cSelect = document.getElementById(classId);
+    const nSelect = document.getElementById(numId);
+    for (let g = 1; g <= maxGrade; g++) gSelect.options.add(new Option(g + "학년", g));
+    for (let c = 1; c <= maxClass; c++) cSelect.options.add(new Option(c + "반", c));
+    for (let n = 1; n <= maxNumber; n++) nSelect.options.add(new Option(n + "번", n));
+  }
+  initDropdowns('studentGrade', 'studentClass', 'studentNumber');
+  initDropdowns('parentChildGrade', 'parentChildClass', 'parentChildNumber');
+
+  function toggleFields() {
+    var type = document.getElementById('userType').value;
+    document.getElementById('studentFields').style.display = (type === 'student') ? 'block' : 'none';
+    document.getElementById('parentFields').style.display = (type === 'parent') ? 'block' : 'none';
+    document.getElementById('teacherFields').style.display = (type === 'teacher') ? 'block' : 'none';
+    document.getElementById('signatureGroup').style.display = (type === 'teacher') ? 'none' : 'block';
+
+    setRequired('studentFields', type === 'student');
+    setRequired('parentFields', type === 'parent');
+    setRequired('teacherFields', type === 'teacher');
+  }
+
+  function setRequired(containerId, isRequired) {
+    var fields = document.getElementById(containerId).querySelectorAll('input, select');
+    fields.forEach(function(field) {
+      if (isRequired) field.setAttribute('required', 'required');
+      else field.removeAttribute('required');
+    });
+  }
+
+  function addOpinionEntry() {
+    entryCounter++;
+    var id = entryCounter;
+    var container = document.getElementById('opinionContainer');
+    var div = document.createElement('div');
+    div.className = 'opinion-entry';
+    div.id = 'entry-' + id;
+    div.innerHTML =
+      '<button type="button" class="remove-entry-btn" onclick="removeOpinionEntry(' + id + ')">✕ 삭제</button>' +
+      '<div class="entry-title">의견 ' + id + '</div>' +
+      '<div class="article-select-row">' +
+        '<select id="chapter-' + id + '" onchange="onChapterChange(' + id + ')"><option value="">장 선택</option></select>' +
+        '<select id="section-' + id + '" onchange="onSectionChange(' + id + ')" style="display:none;"><option value="">절 선택</option></select>' +
+        '<select id="article-' + id + '"><option value="">조 선택</option></select>' +
+      '</div>' +
+      '<input type="text" id="detail-' + id + '" placeholder="몇 항 / 몇 호인지 알고 계시면 적어주세요 (선택)">' +
+      '<div class="detail-hint">예: 제2항 3호</div>' +
+      '<textarea id="opinion-' + id + '" rows="3" placeholder="의견 내용을 작성해 주세요."></textarea>';
+    container.appendChild(div);
+
+    var chapterSelect = document.getElementById('chapter-' + id);
+    Object.keys(regulationData).forEach(function(ch) {
+      chapterSelect.options.add(new Option(ch, ch));
+    });
+
+    if (container.children.length <= 1) {
+      div.querySelector('.remove-entry-btn').style.display = 'none';
+    }
+  }
+
+  function removeOpinionEntry(id) {
+    var container = document.getElementById('opinionContainer');
+    if (container.children.length <= 1) {
+      alert('최소 1개의 의견란은 남아있어야 합니다.');
+      return;
+    }
+    document.getElementById('entry-' + id).remove();
+  }
+
+  function onChapterChange(id) {
+    var chapter = document.getElementById('chapter-' + id).value;
+    var sectionSelect = document.getElementById('section-' + id);
+    var articleSelect = document.getElementById('article-' + id);
+    sectionSelect.innerHTML = '<option value="">절 선택</option>';
+    articleSelect.innerHTML = '<option value="">조 선택</option>';
+
+    if (!chapter) { sectionSelect.style.display = 'none'; return; }
+    var data = regulationData[chapter];
+    if (data.sections) {
+      sectionSelect.style.display = '';
+      Object.keys(data.sections).forEach(function(sec) {
+        sectionSelect.options.add(new Option(sec, sec));
+      });
+    } else {
+      sectionSelect.style.display = 'none';
+      data.articles.forEach(function(art) {
+        articleSelect.options.add(new Option(art, art));
+      });
+    }
+  }
+
+  function onSectionChange(id) {
+    var chapter = document.getElementById('chapter-' + id).value;
+    var section = document.getElementById('section-' + id).value;
+    var articleSelect = document.getElementById('article-' + id);
+    articleSelect.innerHTML = '<option value="">조 선택</option>';
+    if (!chapter || !section) return;
+    regulationData[chapter].sections[section].forEach(function(art) {
+      articleSelect.options.add(new Option(art, art));
+    });
+  }
+
+  addOpinionEntry();
+
+  var canvas = document.getElementById('signature-pad');
+  var ctx = canvas.getContext('2d');
+  var isDrawing = false;
+
+  function resizeCanvas() {
+    var ratio = Math.max(window.devicePixelRatio || 1, 1);
+    canvas.width = canvas.offsetWidth * ratio;
+    canvas.height = canvas.offsetHeight * ratio;
+    ctx.scale(ratio, ratio);
+    clearCanvas();
+  }
+  window.addEventListener('resize', resizeCanvas);
+  setTimeout(resizeCanvas, 200);
+
+  function getPos(e) {
+    var rect = canvas.getBoundingClientRect();
+    var clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    var clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    return { x: clientX - rect.left, y: clientY - rect.top };
+  }
+  function startDraw(e) { isDrawing = true; ctx.beginPath(); var pos = getPos(e); ctx.moveTo(pos.x, pos.y); if (e.touches) e.preventDefault(); }
+  function moveDraw(e) { if (!isDrawing) return; var pos = getPos(e); ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#000'; ctx.lineTo(pos.x, pos.y); ctx.stroke(); if (e.touches) e.preventDefault(); }
+  function stopDraw() { isDrawing = false; }
+
+  canvas.addEventListener('mousedown', startDraw); canvas.addEventListener('mousemove', moveDraw); window.addEventListener('mouseup', stopDraw);
+  canvas.addEventListener('touchstart', startDraw, { passive: false }); canvas.addEventListener('touchmove', moveDraw, { passive: false }); canvas.addEventListener('touchend', stopDraw);
+
+  function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+  document.getElementById('mainForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    if (!SCRIPT_URL || SCRIPT_URL.indexOf('https://script.google.com/macros/s/AKfycbw6bgCrkoHRpGvUNePMBmmhQAyJMSDrGNC8uTj242f65egIOjivDeOJrvutzp9ZMLyNFg/exec') !== -1) {
+      alert('설정 오류: index.html 안의 SCRIPT_URL 값에 Apps Script 배포 URL을 먼저 넣어주세요.');
+      return;
+    }
+
+    var userType = document.getElementById('userType').value;
+
+    if (!userType) { alert("제출자 신분을 선택해 주세요."); return; }
+
+    if (userType === 'student') {
+      var g = document.getElementById('studentGrade').value;
+      var c = document.getElementById('studentClass').value;
+      var n = document.getElementById('studentNumber').value;
+      var name = document.getElementById('studentName').value.trim();
+      if (!g || !c || !n || !name) { alert("학생 정보(학년, 반, 번호, 이름)를 모두 입력해 주세요."); return; }
+    }
+    if (userType === 'parent') {
+      var cg = document.getElementById('parentChildGrade').value;
+      var cc = document.getElementById('parentChildClass').value;
+      var cn = document.getElementById('parentChildNumber').value;
+      var cName = document.getElementById('childName').value.trim();
+      var pName = document.getElementById('parentName').value.trim();
+      if (!cg || !cc || !cn || !cName || !pName) { alert("학부모 및 자녀 정보를 모두 입력해 주세요."); return; }
+    }
+    if (userType === 'teacher') {
+      var tName = document.getElementById('teacherName').value.trim();
+      if (!tName) { alert("교사 성명을 입력해 주세요."); return; }
+    }
+
+    var entries = document.querySelectorAll('.opinion-entry');
+    var articlesArr = [];
+    var opinionsArr = [];
+    for (var i = 0; i < entries.length; i++) {
+      var entryId = entries[i].id.replace('entry-', '');
+      var chapter = document.getElementById('chapter-' + entryId).value;
+      var section = document.getElementById('section-' + entryId).value;
+      var article = document.getElementById('article-' + entryId).value;
+      var detail = document.getElementById('detail-' + entryId).value.trim();
+      var opinionText = document.getElementById('opinion-' + entryId).value.trim();
+
+      if (!chapter || !article || !opinionText) {
+        alert((i + 1) + "번째 의견의 장/조 및 의견 내용을 모두 입력해 주세요.");
+        return;
+      }
+      var articleStr = chapter + (section ? ' > ' + section : '') + ' > ' + article + (detail ? ' (' + detail + ')' : '');
+      articlesArr.push((i + 1) + ") " + articleStr);
+      opinionsArr.push((i + 1) + ") " + opinionText);
+    }
+
+    var formData = {
+      userType: userType,
+      articles: articlesArr.join('\n'),
+      opinions: opinionsArr.join('\n')
+    };
+
+    if (userType !== 'teacher') {
+      var blank = document.createElement('canvas');
+      blank.width = canvas.width; blank.height = canvas.height;
+      if (canvas.toDataURL() === blank.toDataURL()) { alert("서명을 입력해 주세요."); return; }
+      formData.signature = canvas.toDataURL();
+    }
+
+    if (userType === 'student') {
+      formData.grade = document.getElementById('studentGrade').value;
+      formData.classNum = document.getElementById('studentClass').value;
+      formData.number = document.getElementById('studentNumber').value;
+      formData.studentName = document.getElementById('studentName').value;
+    } else if (userType === 'parent') {
+      formData.childGrade = document.getElementById('parentChildGrade').value;
+      formData.childClass = document.getElementById('parentChildClass').value;
+      formData.childNumber = document.getElementById('parentChildNumber').value;
+      formData.childName = document.getElementById('childName').value;
+      formData.parentName = document.getElementById('parentName').value;
+    } else if (userType === 'teacher') {
+      formData.teacherName = document.getElementById('teacherName').value;
+    }
+
+    var submitBtn = document.querySelector('button[type="submit"]');
+    submitBtn.disabled = true;
+    submitBtn.textContent = '제출 중...';
+    document.getElementById('loadingOverlay').style.display = 'flex';
+
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(formData)
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      document.getElementById('loadingOverlay').style.display = 'none';
+      if (data.status === 'success') {
+        alert(data.message);
+        location.reload();
+      } else {
+        alert('제출 중 오류가 발생했습니다: ' + data.message);
+        submitBtn.disabled = false;
+        submitBtn.textContent = '의견 제출하기';
+      }
+    })
+    .catch(function(err) {
+      document.getElementById('loadingOverlay').style.display = 'none';
+      alert('네트워크 오류로 제출에 실패했습니다. 인터넷 연결을 확인 후 다시 시도해주세요.\n(' + err.message + ')');
+      submitBtn.disabled = false;
+      submitBtn.textContent = '의견 제출하기';
+    });
+  });
+</script>
+
+</body>
+</html>
